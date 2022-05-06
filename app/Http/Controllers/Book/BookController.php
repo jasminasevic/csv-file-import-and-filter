@@ -8,7 +8,7 @@ use App\Models\BookModel;
 
 class BookController extends Controller
 {
-    public function book(){
+    public function getAllBooks(){
         return response()->json(BookModel::get(), 200);
     }
 }
