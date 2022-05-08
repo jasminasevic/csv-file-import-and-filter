@@ -18,7 +18,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('book', 'App\Http\Controllers\Book\BookController')->except(
-    'index'
-);
+Route::get('/book/{id}', 'App\Http\Controllers\Book\BookController@show');
 Route::get('/book/{keyword?}', 'App\Http\Controllers\Book\BookController@index');
+
+Route::post('/book/import-file', 'App\Http\Controllers\Book\BookController@importFile');
+//->name('book-import');
+
