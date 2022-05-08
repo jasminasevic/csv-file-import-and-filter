@@ -18,4 +18,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('book', 'App\Http\Controllers\Book\BookController');
+Route::apiResource('book', 'App\Http\Controllers\Book\BookController')->except(
+    'index'
+);
+Route::get('/book/{keyword?}', 'App\Http\Controllers\Book\BookController@index');

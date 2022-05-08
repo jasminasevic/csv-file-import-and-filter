@@ -14,10 +14,27 @@ class BookController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        if($request->keyword){
+            $bookFilteredList = BookModel::where('title', 'LIKE', '%' . $request->keyword . '%')
+                ->paginate(10);
+
+            if($bookFilteredList->isEmpty()){
+                return response()->json([
+                    'message' => 'Record not found'
+                ], 404);
+            }
+
+            return response()->json([
+                'data' => $bookFilteredList
+            ], 200);
+        }
+
         $bookList = BookModel::paginate(10);
-        return response()->json($bookList, 200);
+        return response()->json([
+            'data' => $bookList
+        ], 200);
     }
 
     /**
@@ -52,10 +69,14 @@ class BookController extends Controller
         $book = BookModel::find($id);
 
         if(is_null($book)){
-            return response()->json(["message" => "Record not found"], 404);
+            return response()->json([
+                'message' => 'Record not found'
+            ], 404);
         }
 
-        return response()->json($book, 200);
+        return response()->json([
+            'data' => $book
+        ], 200);
     }
 
     /**
