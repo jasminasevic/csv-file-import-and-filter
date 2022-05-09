@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,5 +23,14 @@ Route::get('/book/{id}', 'App\Http\Controllers\Book\BookController@show');
 Route::get('/book/{keyword?}', 'App\Http\Controllers\Book\BookController@index');
 
 Route::post('/book/import-file', 'App\Http\Controllers\Book\BookController@importFile');
-//->name('book-import');
+
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'auth'
+], function(){
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login']);
+});
+
+
 
