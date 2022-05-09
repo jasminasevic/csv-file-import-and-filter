@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Book;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\BookModel;
+use App\Models\Book;
 use App\Imports\BookImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Validator;
@@ -15,7 +15,7 @@ class BookController extends Controller
     public function index(Request $request)
     {
         if($request->keyword){
-            $bookFilteredList = BookModel::where('title', 'LIKE', '%' . $request->keyword . '%')
+            $bookFilteredList = Book::where('title', 'LIKE', '%' . $request->keyword . '%')
                 ->paginate(10);
 
             if($bookFilteredList->isEmpty()){
@@ -29,7 +29,7 @@ class BookController extends Controller
             ], 200);
         }
 
-        $bookList = BookModel::paginate(10);
+        $bookList = Book::paginate(10);
         return response()->json([
             'data' => $bookList
         ], 200);
@@ -38,7 +38,7 @@ class BookController extends Controller
 
     public function show($id)
     {
-        $book = BookModel::find($id);
+        $book = Book::find($id);
 
         if(is_null($book)){
             return response()->json([
