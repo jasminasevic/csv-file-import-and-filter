@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use http\Env\Response;
-use Illuminate\Http\Request;
-use Tymon\JWTAuth\Contracts\Providers\Auth;
+use App\Http\Requests\UserRequest;
 use Validator;
 use App\Models\User;
+use App\Http\Requests\LoginUserRequest;
 
 class AuthController extends Controller
 {
@@ -17,18 +16,7 @@ class AuthController extends Controller
         $this->user = new User();
     }
 
-    public function register(Request $request){
-
-        $validator = Validator::make($request->all(),[
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required|string|email|unique:users',
-            'password' => 'required|string|confirmed|min:6'
-        ]);
-
-        if($validator->fails()){
-            return response()->json($validator->errors()->toJson(),400);
-        }
+    public function register(UserRequest $request){
 
         $user = $this->user->addNewUser($request);
 
@@ -38,16 +26,7 @@ class AuthController extends Controller
         ],201);
     }
 
-    public function login(Request $request){
-
-        $validator = Validator::make($request->all(),[
-            'email' => 'required|email',
-            'password' => 'required|string|min:6'
-        ]);
-
-        if($validator->fails()){
-            return response()->json($validator->errors(),422);
-        }
+    public function login(LoginUserRequest $request){
 
         $user = $this->user->getUserFilteredByEmail($request);
 

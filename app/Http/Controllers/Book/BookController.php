@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Book;
 use Validator;
+use App\Http\Requests\ImportCsvFileRequest;
 
 class BookController extends Controller
 {
@@ -55,17 +56,7 @@ class BookController extends Controller
     }
 
 
-    public function importFile(Request $request){
-
-        $validator = Validator::make($request->all(),[
-            'file' => 'required|file|mimes:csv,xml,xlsx'
-        ]);
-
-        if($validator->fails()) {
-            return response()->json([
-                'error' => $validator->errors()
-            ], 401);
-        }
+    public function importFile(ImportCsvFileRequest $request){
 
         $this->books->importBookCsvFile($request);
 
@@ -73,6 +64,5 @@ class BookController extends Controller
             'message' => 'File imported successfully'
         ], 200);
     }
-
 
 }
