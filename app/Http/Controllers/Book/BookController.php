@@ -5,18 +5,21 @@ namespace App\Http\Controllers\Book;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Book;
-use App\Imports\BookImport;
-use Maatwebsite\Excel\Facades\Excel;
 use Validator;
 
 class BookController extends Controller
 {
+    protected $books;
+
+    public function __construct()
+    {
+       $this->books = new Book();
+    }
 
     public function index(Request $request)
     {
         if($request->keyword){
-            $bookFilteredList = Book::where('title', 'LIKE', '%' . $request->keyword . '%')
-                ->paginate(10);
+            $bookFilteredList = $this->books->getBooksFilteredByTitle($request);
 
             if($bookFilteredList->isEmpty()){
                 return response()->json([
@@ -29,7 +32,7 @@ class BookController extends Controller
             ], 200);
         }
 
-        $bookList = Book::paginate(10);
+        $bookList = $this->books->getBooks();
         return response()->json([
             'data' => $bookList
         ], 200);
@@ -38,7 +41,7 @@ class BookController extends Controller
 
     public function show($id)
     {
-        $book = Book::find($id);
+        $book = $this->books->getBook($id);
 
         if(is_null($book)){
             return response()->json([
@@ -64,7 +67,7 @@ class BookController extends Controller
             ], 401);
         }
 
-        Excel::import(new BookImport, $request->file);
+        $this->books->importBookCsvFile($request);
 
         return response()-> json([
             'message' => 'File imported successfully'

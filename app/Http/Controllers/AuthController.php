@@ -10,8 +10,11 @@ use App\Models\User;
 
 class AuthController extends Controller
 {
+    protected $user;
+
     public function __construct(){
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->user = new User();
     }
 
     public function register(Request $request){
@@ -27,11 +30,7 @@ class AuthController extends Controller
             return response()->json($validator->errors()->toJson(),400);
         }
 
-        $user = User::create(array_merge(
-            $validator -> validated(),
-            ['password' => bcrypt($request->password)],
-            ['role_id' => ($request->role_id)]
-        ));
+        $user = $this->user->addNewUser($request);
 
         return response()->json([
             'message' => 'User successfully registered',
@@ -50,9 +49,7 @@ class AuthController extends Controller
             return response()->json($validator->errors(),422);
         }
 
-        $user = User::where([
-            'email' => $request->email,
-        ])->first();
+        $user = $this->user->getUserFilteredByEmail($request);
 
         if(!$user){
             return response()->json(['error' => 'Unauthorized user'], 401);
@@ -73,8 +70,7 @@ class AuthController extends Controller
         return response()->json([
            'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL()*60,
-        //    'user' => auth()->user()
+            'expires_in' => auth()->factory()->getTTL()*60
         ]);
     }
 
