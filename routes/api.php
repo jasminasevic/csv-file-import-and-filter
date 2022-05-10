@@ -22,7 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/book/{id}', [BookController::class, 'show']);
 Route::get('/book/{keyword?}',  [BookController::class, 'index']);
-Route::post('/book/import-file', [BookController::class, 'importFile']);
+Route::post('/book/import-file', [BookController::class, 'importFile'])->middleware('isAdmin');
 
 Route::group([
     'middleware' => 'api',
@@ -30,6 +30,8 @@ Route::group([
 ], function(){
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+
 });
 
 
