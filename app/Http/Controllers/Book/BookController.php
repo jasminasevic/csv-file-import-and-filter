@@ -19,38 +19,19 @@ class BookController extends Controller
 
     public function index(Request $request)
     {
-        if($request->title){
-            $booksFilteredByTitle = $this->books->getBooksFilteredByTitle($request);
+        if($request){
+            $filteredBooks = $this->books->getFilteredBooks($request);
 
-            if($booksFilteredByTitle->isEmpty()){
+            if($filteredBooks->isEmpty()){
                 return response()->json([
                     'message' => 'Record not found'
                 ], 404);
             }
 
             return response()->json([
-                'data' => $booksFilteredByTitle
+                'data' => $filteredBooks
             ], 200);
         }
-
-        if($request->year){
-            $booksFilteredByYear = $this->books->getBooksFilteredByYear($request);
-
-            if(!$booksFilteredByYear){
-                return response()->json([
-                    'message' => 'Record not found'
-                ], 404);
-            }
-
-            return response()->json([
-                'data' => $booksFilteredByYear
-            ], 200);
-        }
-
-        $bookList = $this->books->getBooks();
-        return response()->json([
-            'data' => $bookList
-        ], 200);
     }
 
 

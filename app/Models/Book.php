@@ -31,31 +31,26 @@ class Book extends Model
         return $this::paginate($this->resultsPerPage);
     }
 
-    public function getBooksFilteredByTitle($request){
-        return $this::where('title', 'LIKE', '%' . $request->title . '%')
-            ->paginate($this->resultsPerPage);
-    }
+    public function getFilteredBooks($request){
 
-    public function getBooksFilteredByYear($request){
+        $parametersMap = array(
+            'less_than_five' => array('>', 5),
+            'less_than_ten' => array('>', 10),
+            'greater_than_ten' => array('<', 10),
+        );
 
-        $condition = $request->year;
+        $queryBuilder = $this::query();
 
-        switch ($condition) {
-            case "less_than_5":
-                return $this::where((DB::raw('STR_TO_DATE(issue_date, "%d/%m/%Y")')), '>', Carbon::now()->subYears(5))
-                   ->paginate($this->resultsPerPage);
-
-            case "less_than_10":
-                return $this::where((DB::raw('STR_TO_DATE(issue_date, "%d/%m/%Y")')), '>', Carbon::now()->subYears(10))
-                    ->paginate($this->resultsPerPage);
-
-            case "more_than_10":
-                return $this::where((DB::raw('STR_TO_DATE(issue_date, "%d/%m/%Y")')), '<', Carbon::now()->subYears(10))
-                    ->paginate($this->resultsPerPage);
-
-            default:
-                return $this::paginate($this->resultsPerPage);
+        if($request->year){
+            $queryBuilder->where((DB::raw('STR_TO_DATE(issue_date, "%d/%m/%Y")')), $parametersMap[$request->year][0],
+                Carbon::now()->subYears( $parametersMap[$request->year][1]));
         }
+
+        if($request->title){
+            $queryBuilder->where('title', 'LIKE', '%' . $request->title . '%');
+        }
+
+        return $queryBuilder->paginate($this->resultsPerPage);
     }
 
     public function importBookCsvFile($request){
