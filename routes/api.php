@@ -21,7 +21,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/book/{id}', [BookController::class, 'show']);
-Route::get('/book/{keyword?}',  [BookController::class, 'index']);
+Route::get('/book/{title?}/{year?}',  [BookController::class, 'index']);
+
 Route::post('/book/import-file', [BookController::class, 'importFile'])->middleware('isAdmin');
 
 Route::group([
