@@ -7,7 +7,7 @@ recruitment process for a PHP backend developer position.
 ### Prerequisites
 
 - LAMP Stack (Linux, Apache, MySQL, PHP) 
-- Laravel
+- Laravel v9.11.0 (PHP v8.1.5)
 - Composer
 - PhpStorm IDE
 - PhpMyAdmin
