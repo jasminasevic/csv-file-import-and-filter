@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements  JWTSubject
+class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -76,12 +76,11 @@ class User extends Authenticatable implements  JWTSubject
     public function addNewUser($request){
         return $this::create([
             'first_name' => ($request->first_name),
-            'last_name' => ($request->last_name),
-            'email' => ($request->email),
-            'password' => bcrypt($request->password),
-            'role_id' => ($request->role_id)]
+                'last_name' => ($request->last_name),
+                'email' => ($request->email),
+                'password' => bcrypt($request->password),
+                'role_id' => ($request->role_id)]
         );
     }
-
 
 }
