@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -67,13 +66,15 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    public function getUserFilteredByEmail($request){
+    public function getUserFilteredByEmail($request)
+    {
         return $this::where([
             'email' => $request->email,
         ])->first();
     }
 
-    public function addNewUser($request){
+    public function addNewUser($request)
+    {
         return $this::create([
             'first_name' => ($request->first_name),
                 'last_name' => ($request->last_name),

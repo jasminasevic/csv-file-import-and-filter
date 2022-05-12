@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\GeneralJsonException;
 use App\Http\Requests\UserRequest;
 use Validator;
 use App\Models\User;
@@ -31,15 +32,15 @@ class AuthController extends Controller
         $user = $this->user->getUserFilteredByEmail($request);
 
         if(!$user){
-            return response()->json(['error' => 'Unauthorized user'], 401);
+            throw new GeneralJsonException('Unauthorized user', 401);
         }
 
         if (!password_verify($request->password, $user->password)) {
-            return response()->json(['error' => 'Unauthorized user'], 401);
+            throw new GeneralJsonException('Unauthorized user', 401);
         }
 
         if (! $token = auth()->login($user)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            throw new GeneralJsonException('Unauthorized user', 401);
         }
 
         return response([
@@ -47,11 +48,10 @@ class AuthController extends Controller
             'message' => 'User logged in successfully'
         ], 201);
 
-
-      //  return $this->createNewToken($token);
     }
 
-    public function createNewToken($token){
+    public function createNewToken($token)
+    {
         return response()->json([
            'access_token' => $token,
             'token_type' => 'bearer',
@@ -59,7 +59,8 @@ class AuthController extends Controller
         ]);
     }
 
-    public function logout(){
+    public function logout()
+    {
         auth()->logout();
 
         return response()->json([
