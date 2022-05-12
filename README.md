@@ -24,7 +24,7 @@ recruitment process for a PHP backend developer position.
 - import downloaded project
 - run composer install
 - open .env file and edit the following:
-    DB_DATABASE=csvFileImportTest
+    DB_DATABASE=csv-files-import
     DB_USERNAME=your_username_on_phpMyAdmin
     DB_PASSWORD=your_password_on_phpMyAdmin 
 - run php artisan key:generate
