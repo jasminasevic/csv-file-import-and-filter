@@ -1,6 +1,8 @@
 ## About Project
 
-CSV file import and filter API is a test project for a PHP backend developer recruitment process.
+CSV file import and filter is a small Laravel RESTful API project with JWT 
+Authentication. It is built as a part of a technical interview during 
+recruitment process for a PHP backend developer position.
 
 ### Prerequisites
 
@@ -14,11 +16,20 @@ CSV file import and filter API is a test project for a PHP backend developer rec
 ## Setup
 
 - git clone https://github.com/jasminasevic/csv-file-import-and-filter
+- move the downloaded project to the base directory (var/www/html)
+- open phpMyAdmin 
+- run the following SQL command to create the database in phpMyAdmin: 
+    CREATE DATABASE csv-files-import DEFAULT CHARACTER SET = 'utf8mb4';
 - open PhpStorm IDE
 - import downloaded project
-- import MySQL database file to phpMyAdmin
-- edit DB_USERNAME and DB_PASSWORD in .env file
-- run the project via terminal with "php artisan serve" command
+- run composer install
+- open .env file and edit the following:
+    DB_DATABASE=csvFileImportTest
+    DB_USERNAME=your_username_on_phpMyAdmin
+    DB_PASSWORD=your_password_on_phpMyAdmin 
+- run php artisan key:generate
+- run php artisan migrate --seed
+- run php artisan serve
 
 ## License
 
