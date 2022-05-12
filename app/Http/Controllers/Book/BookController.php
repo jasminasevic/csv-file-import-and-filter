@@ -19,6 +19,14 @@ class BookController extends Controller
 
     public function index(Request $request)
     {
+        $issue_date_values = ['less_than_five','less_than_ten','greater_than_ten'];
+
+        if($request->year && !in_array($request->year, $issue_date_values)){
+            return response()->json([
+                'message' => 'Bad Request'
+            ], 404);
+        }
+
         if($request){
             $filteredBooks = $this->books->getFilteredBooks($request);
 
